@@ -2,6 +2,7 @@ import MalApi from '@/components/MalApi';
 import React, { useState } from "react";
 import { Text, View, Button } from "react-native";
 import styles from '@/components/styles';
+import { Link } from 'expo-router';
 
 export default function Home() {
   const [selected, setSelected] = useState<"topAnime" | "topManga">("topAnime");
@@ -15,6 +16,7 @@ export default function Home() {
       </View>
       <MalApi page={selected} />
       <Text style={styles.centerText}>Edit app/index.tsx to edit this screen.</Text>
+      <Link href="/anime">Go to Anime Search</Link>
       
       </>
   );
