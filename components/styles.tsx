@@ -16,10 +16,11 @@ export default StyleSheet.create({
     backgroundColor: '#1f1f1f',
     borderRadius: 16,
     padding: 12,
+    width: '50%',
+    height: 300,
   },
   image: {
-    width: '100%',
-    height: 240,
+    height: '50%',
     borderRadius: 12,
   },
   title: {
