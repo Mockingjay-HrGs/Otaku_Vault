@@ -1,71 +1,12 @@
+// utils/ApiClient.ts
 
 export default class ApiClient {
-    private baseUrl: string= "https://api.jikan.moe/v4/";
-    private url?: string;
-    private param?: string;
-    private params?: Array<string>;
-    private page: string = "1";
-    
+    private readonly baseUrl: string = "https://api.jikan.moe/v4";
 
-    setUrl(url:string) {
-        this.url = url;
-    }
-
-    getUrl() {
-        return this.baseUrl += this.url;
-    }
-
-    addParams(param: string) {
-        this.param = param;
-        return this.url += this.param;
-    }
-
-    setPage(page: string) {
-        this.page = "&page=" + page;
-        return this.url += this.page;
-    } 
-
-    fetchTopAnime = async () => {
+    /** Helper pour faire un GET et uniformiser data / error */
+    private async get(path: string): Promise<{ data: any[] | null; error: string | null }> {
         try {
-            this.setUrl("top/anime");
-            this.addParams("?sfw=true");
-            this.setPage("1");
-            const res = await fetch(this.baseUrl + this.url);
-            const json = await res.json();
-            return { data: json.data, error: null };
-        
-        } catch (err: any) {
-            return { data: null, error: err.message };
-        }
-    }
-
-    fetchTopManga = async () => {
-        try {
-            this.setUrl("top/manga");
-            this.addParams("?sfw=true");
-            this.setPage("1");
-            const res = await fetch(this.baseUrl + this.url);
-            const json = await res.json();
-            return { data: json.data, error: null };
-        
-        } catch (err: any) {
-            return { data: null, error: err.message };
-        }
-    }
-
-    searchAnimeByParams = async (query: string, params?: Array<string>, param?: string) => {
-        try {
-            this.setUrl("anime");
-            this.addParams(`?q=${encodeURIComponent(query)}`);
-            if (params) {
-                params.forEach((param) => {
-                    this.addParams("&" + param);
-                });
-            }
-
-            this.addParams("&sfw=true");
-            
-            const res = await fetch(this.baseUrl + this.url);
+            const res = await fetch(`${this.baseUrl}${path}`);
             const json = await res.json();
             return { data: json.data ?? null, error: null };
         } catch (err: any) {
@@ -73,24 +14,41 @@ export default class ApiClient {
         }
     }
 
-    searchMangaByParams = async (query: string, params?: Array<string>, param?: string) => {
-        try {
-            this.setUrl("manga");
-            this.addParams(`?q=${encodeURIComponent(query)}`);
-            if (params) {
-                params.forEach((param) => {
-                    this.addParams("&" + param);
-                });
-            }
-
-            this.addParams("&sfw=true");
-            
-            const res = await fetch(this.baseUrl + this.url);
-            const json = await res.json();
-            return { data: json.data ?? null, error: null };
-        } catch (err: any) {
-            return { data: null, error: err?.message ?? String(err) };
-        }
+    // Top anime en cours de diffusion (Top Airing)
+    async fetchTopAiringAnime() {
+        // /top/anime?filter=airing&sfw=true&page=1
+        return this.get("/top/anime?filter=airing&sfw=true&page=1");
     }
 
+    // Top anime à venir (Upcoming)
+    async fetchUpcomingAnime() {
+        // /top/anime?filter=upcoming&sfw=true&page=1
+        return this.get("/top/anime?filter=upcoming&sfw=true&page=1");
+    }
+
+    async fetchTopAnime() {
+        // Top anime général (sans filtre airing/upcoming)
+        return this.get("/top/anime?sfw=true&page=1");
+    }
+
+    async fetchTopManga() {
+        return this.get("/top/manga?sfw=true&page=1");
+    }
+
+    async searchAnimeByParams(query: string, params?: Array<string>, _param?: string) {
+        // params = ["type=tv", "min_score=8"] par ex.
+        const extra = params && params.length ? "&" + params.join("&") : "";
+        const path =
+            "/anime?q=" + encodeURIComponent(query) + "&sfw=true" + extra;
+
+        return this.get(path);
+    }
+
+    async searchMangaByParams(query: string, params?: Array<string>, _param?: string) {
+        const extra = params && params.length ? "&" + params.join("&") : "";
+        const path =
+            "/manga?q=" + encodeURIComponent(query) + "&sfw=true" + extra;
+
+        return this.get(path);
+    }
 }

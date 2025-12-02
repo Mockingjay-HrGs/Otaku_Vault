@@ -1,40 +1,80 @@
-import ApiClient from "@/utils/ApiClient";
+// components/MalApi.tsx
 import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView } from "react-native";
-import AnimeListDisplay from "./AnimeList";
-import MangaListDisplay from "./MangaList";
-import styles from './styles';
 
-const MalApi = ({ page }: { page: "topAnime" | "topManga" }) => {
+import ApiClient from "@/utils/ApiClient";
+import AnimeListDisplay from "./AnimeList";
+import styles from "./styles";
+import type { HomeTab } from "@/app/index";
+
+type Anime = {
+    mal_id: number;
+    title?: string | null;
+    score?: number | null;
+    images?: {
+        jpg?: {
+            image_url?: string | null;
+        };
+    };
+};
+
+type MalApiProps = {
+    page: HomeTab; // "topAiring" | "upcoming"
+};
+
+const MalApi: React.FC<MalApiProps> = ({ page }) => {
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<Anime[]>([]);
     const [error, setError] = useState<string | null>(null);
-    
+
     useEffect(() => {
         const load = async () => {
             setLoading(true);
+            setError(null);
 
-            const api = new ApiClient();
-            let response;
+            try {
+                const api = new ApiClient();
 
-            if (page === "topAnime") response = await api.fetchTopAnime();
-            if (page === "topManga") response = await api.fetchTopManga();
+                let response;
+                if (page === "topAiring") {
+                    response = await api.fetchTopAiringAnime();
+                } else {
+                    response = await api.fetchUpcomingAnime();
+                }
 
-            setData(response?.data ?? []);
-            setError(response?.error ?? null);
-            setLoading(false);
+                const list = Array.isArray(response?.data) ? response.data : [];
+                setData(list);
+                setError(response?.error ?? null);
+            } catch (e: any) {
+                console.error(e);
+                setError(e?.message ?? "Unexpected error");
+                setData([]);
+            } finally {
+                setLoading(false);
+            }
         };
 
         load();
     }, [page]);
 
-    if (loading) return <Text style={styles.centerText}>Loading...</Text>;
-    if (error) return <Text style={styles.centerText}>Error: {error}</Text>;
+    if (loading) {
+        return <Text style={styles.centerText}>Loading...</Text>;
+    }
+
+    if (error) {
+        return (
+            <View style={{ padding: 16 }}>
+                <Text style={styles.centerText}>Error: {error}</Text>
+            </View>
+        );
+    }
 
     return (
-        <ScrollView style={{ padding: 16 }}>
-            {page === "topAnime" && <AnimeListDisplay animeList={data} />}
-            {page === "topManga" && <MangaListDisplay mangaList={data} />}
+        <ScrollView
+            style={{ paddingHorizontal: 16 }}
+            contentContainerStyle={{ paddingVertical: 16 }}
+        >
+            <AnimeListDisplay animeList={data} />
         </ScrollView>
     );
 };

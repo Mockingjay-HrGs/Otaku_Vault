@@ -7,8 +7,8 @@ export default function RootLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: 'Otaku Vault',
-          headerShown: true
+          title: 'O',
+          headerShown: false
         }}
       />
       <Stack.Screen
