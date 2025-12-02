@@ -22,7 +22,7 @@ export default function Home() {
             style={{ flex: 1 }}
         >
             <StatusBar barStyle="light-content" />
-            <SafeAreaView style={styles.homeContainer}>
+            <SafeAreaView style={styles.container}>
                 <View style={styles.headerRow}>
                     <Text style={styles.appTitle}>Otaku Vault</Text>
 

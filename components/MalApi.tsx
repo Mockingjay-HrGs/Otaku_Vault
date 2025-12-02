@@ -1,4 +1,3 @@
-// components/MalApi.tsx
 import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView } from "react-native";
 
@@ -19,7 +18,7 @@ type Anime = {
 };
 
 type MalApiProps = {
-    page: HomeTab; // "topAiring" | "upcoming"
+    page: HomeTab;
 };
 
 const MalApi: React.FC<MalApiProps> = ({ page }) => {

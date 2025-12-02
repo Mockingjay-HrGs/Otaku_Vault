@@ -2,7 +2,7 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    homeContainer: {
+    container: {
         flex: 1,
         paddingHorizontal: 16,
         paddingTop: 16,
