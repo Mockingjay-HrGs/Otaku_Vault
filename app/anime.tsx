@@ -107,7 +107,7 @@ export default function AnimeSearch() {
                 <View style={styles.searchBarWrapper}>
                     <TextInput
                         style={styles.searchInput}
-                        placeholder="Search..."
+                        placeholder="Search"
                         placeholderTextColor="#ddddff"
                         value={query}
                         onChangeText={setQuery}
