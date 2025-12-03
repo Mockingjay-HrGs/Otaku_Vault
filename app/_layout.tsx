@@ -19,13 +19,14 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen
-        name="manga"
+        name="anime/[id]"
         options={{
-          title: 'Manga Search',
-          headerShown: true
+          headerShown: false,
         }}
       />
+
     </Stack>
+  
   );
 }
 

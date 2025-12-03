@@ -1,11 +1,12 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 import styles from "./styles";
 
 type Anime = {
     mal_id: number;
     title?: string | null;
-    score?: number | null;
+    episodes?: number | null;
     images?: {
         jpg?: {
             image_url?: string | null;
@@ -25,6 +26,11 @@ const AnimeListDisplay: React.FC<Props> = ({ animeList = [] }) => {
     return (
         <View style={styles.gridContainer}>
             {animeList.map((anime) => (
+                <TouchableOpacity
+                key={anime.mal_id}
+                activeOpacity={0.8}
+                onPress={() => router.push(`/anime/${anime.mal_id}`)}
+            >
                 <View key={anime.mal_id} style={styles.card}>
                     <Image
                         source={{
@@ -38,9 +44,10 @@ const AnimeListDisplay: React.FC<Props> = ({ animeList = [] }) => {
                     </Text>
 
                     <Text style={styles.subtitle}>
-                        Score : {anime.score ?? "N/A"}
+                        Episodes: {anime.episodes ?? "N/A"}
                     </Text>
                 </View>
+                </TouchableOpacity>
             ))}
         </View>
     );
