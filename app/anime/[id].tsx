@@ -61,9 +61,11 @@ export default function AnimeDetailsPage() {
                 if (mounted) setCharacters(Array.isArray(cJson.data) ? cJson.data : []);
                 const eRes = await fetch(`https://api.jikan.moe/v4/anime/${id}/episodes`);
                 const eJson = await eRes.json();
-                if (mounted) setEpisodes(Array.isArray(eJson.data) ? eJson.data : []);            
-            
-                setVideo(details.trailer.embed_url.split("?")[0].split("/")[4]);
+                if (mounted) setEpisodes(Array.isArray(eJson.data) ? eJson.data : []);    
+                
+                if (dRes.ok && dJson.data.trailer?.embed_url) {
+                    setVideo(dJson.data.trailer.embed_url.split("?")[0].split("/")[4]);
+                }
             
             } catch (e) {
                 console.error(e);
