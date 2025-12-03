@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     searchIcon: {
-        fontSize: 20,
+        fontSize: 22,
         color: "white",
     },
 
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(255,255,255,0.25)",
     },
     pillText: {
-        color: "#CCCCFF",
+        color: "#ffffff",
         fontSize: 16,
         fontWeight: "600",
     },
@@ -57,55 +57,61 @@ const styles = StyleSheet.create({
         color: "white",
     },
 
-    /** GRID (HOME LIST) **/
+    /** HOME GRID LIST (MAQUETTE) **/
     gridContainer: {
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-between",
+        marginTop: 8,
     },
-    card: {
+
+    animeCard: {
         width: "48%",
-        marginBottom: 20,
+        marginBottom: 24,
     },
-    image: {
+
+    animeImage: {
         width: "100%",
         aspectRatio: 3 / 4,
         borderRadius: 18,
         backgroundColor: "#111",
-        marginBottom: 8,
-    },
-    title: {
-        color: "white",
-        fontSize: 14,
-        fontWeight: "600",
-    },
-    subtitle: {
-        color: "#CCCCCC",
-        fontSize: 12,
-        marginTop: 2,
+        marginBottom: 10,
     },
 
-    /** TEXT ETAT **/
+    animeTitle: {
+        color: "white",
+        fontSize: 15,
+        fontWeight: "600",
+        marginBottom: 4,
+    },
+
+    animeEpisodes: {
+        color: "#CCCCCC",
+        fontSize: 13,
+    },
+
     centerText: {
         textAlign: "center",
         color: "white",
         marginTop: 24,
     },
 
-    // ancien layout de boutons si tu l'utilises encore
     buttonsRow: {
         flexDirection: "row",
         justifyContent: "center",
         marginBottom: 16,
     },
 
-    /** SEARCH PAGE **/
+    /** SEARCH PAGE (header + barre + liste) **/
 
+    // Conteneur de la page de recherche
     searchContainer: {
         flex: 1,
         paddingHorizontal: 16,
         paddingTop: 8,
     },
+
+    // Header avec Back + Filter
     searchHeader: {
         flexDirection: "row",
         alignItems: "center",
@@ -140,6 +146,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
 
+    // Barre de recherche en pill
     searchBarWrapper: {
         flexDirection: "row",
         alignItems: "center",
@@ -152,7 +159,7 @@ const styles = StyleSheet.create({
         borderColor: "rgba(255,255,255,0.7)",
         paddingVertical: 10,
         paddingHorizontal: 16,
-        paddingRight: 44,
+        paddingRight: 44, // laisse de la place pour l’icône
         color: "white",
         fontSize: 16,
         backgroundColor: "rgba(0,0,0,0.25)",
@@ -167,16 +174,19 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
 
+    // États "loading / vide"
     searchCenter: {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
     },
 
+    // Liste des résultats
     searchListContent: {
         paddingBottom: 24,
     },
 
+    // Ligne de résultat (vue liste, pas la grille)
     searchRow: {
         flexDirection: "row",
         alignItems: "center",

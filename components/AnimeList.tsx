@@ -23,30 +23,31 @@ const AnimeListDisplay: React.FC<Props> = ({ animeList = [] }) => {
         return <Text style={styles.centerText}>No anime found.</Text>;
     }
 
+    const goToDetails = (id: number) => {
+        router.push(`/anime/${id}`);
+    };
+
     return (
         <View style={styles.gridContainer}>
             {animeList.map((anime) => (
                 <TouchableOpacity
-                key={anime.mal_id}
-                activeOpacity={0.8}
-                onPress={() => router.push(`/anime/${anime.mal_id}`)}
-            >
-                <View key={anime.mal_id} style={styles.card}>
+                    key={anime.mal_id}
+                    style={styles.animeCard}
+                    activeOpacity={0.8}
+                    onPress={() => goToDetails(anime.mal_id)}
+                >
                     <Image
-                        source={{
-                            uri: anime.images?.jpg?.image_url ?? undefined,
-                        }}
-                        style={styles.image}
+                        source={{ uri: anime.images?.jpg?.image_url ?? undefined }}
+                        style={styles.animeImage}
                     />
 
-                    <Text style={styles.title} numberOfLines={2}>
-                        {anime.title ?? "Untitled"}
+                    <Text style={styles.animeTitle} numberOfLines={2}>
+                        {anime.title}
                     </Text>
 
-                    <Text style={styles.subtitle}>
-                        Episodes: {anime.episodes ?? "N/A"}
+                    <Text style={styles.animeEpisodes}>
+                        Episodes : {anime.episodes ?? "N/A"}
                     </Text>
-                </View>
                 </TouchableOpacity>
             ))}
         </View>
