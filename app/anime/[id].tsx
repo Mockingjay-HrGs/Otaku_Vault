@@ -43,6 +43,7 @@ export default function AnimeDetailsPage() {
     const [details, setDetails] = useState<AnimeDetails | null>(null);
     const [characters, setCharacters] = useState<Character[]>([]);
     const [episodes, setEpisodes] = useState<any[]>([]);
+    const [video, setVideo] = useState<string>("");
 
     useEffect(() => {
         if (!id) return;
@@ -60,9 +61,12 @@ export default function AnimeDetailsPage() {
                 if (mounted) setCharacters(Array.isArray(cJson.data) ? cJson.data : []);
                 const eRes = await fetch(`https://api.jikan.moe/v4/anime/${id}/episodes`);
                 const eJson = await eRes.json();
-                if (mounted) setEpisodes(Array.isArray(eJson.data) ? eJson.data : []);            
-            
-            
+                if (mounted) setEpisodes(Array.isArray(eJson.data) ? eJson.data : []);
+
+                if (dRes.ok && dJson.data.trailer?.embed_url) {
+                    setVideo(dJson.data.trailer.embed_url.split("?")[0].split("/")[4]);
+                }
+
             } catch (e) {
                 console.error(e);
             } finally {
@@ -90,7 +94,7 @@ export default function AnimeDetailsPage() {
         return (
             <SafeAreaView style={styles.searchContainer}>
                 <View style={styles.searchCenter}>
-                    <ActivityIndicator color="#090979" />
+                    <ActivityIndicator color="#fff" />
                 </View>
             </SafeAreaView>
         );
@@ -118,10 +122,12 @@ export default function AnimeDetailsPage() {
                             <View style={{ height: 220, marginTop: 12, marginBottom: 8, borderRadius: 8, overflow: "hidden" }}>
                                 <WebView
                                     originWhitelist={['*']}
-                                    source={{ uri: details.trailer.embed_url }}
+                                    source={{ uri: "https://www.youtube.com/watch?v=" + video }}
+                                    referrerpolicy='strict-origin-when-cross-origin'
                                     style={{ flex: 1 }}
-                                    allowsInlineMediaPlayback
-                                    mediaPlaybackRequiresUserAction={false}
+                                    useWebKit={true}
+
+
                                 />
                             </View>
                         ) : null}
@@ -141,7 +147,7 @@ export default function AnimeDetailsPage() {
                         </Text>
 
                         <View>
-                            
+
                         </View>
 
                         <Text style={{ color: "#fff", marginTop: 16, fontSize: 16 }}>Characters</Text>
