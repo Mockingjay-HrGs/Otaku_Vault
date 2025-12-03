@@ -43,6 +43,7 @@ export default function AnimeDetailsPage() {
     const [details, setDetails] = useState<AnimeDetails | null>(null);
     const [characters, setCharacters] = useState<Character[]>([]);
     const [episodes, setEpisodes] = useState<any[]>([]);
+    const [video, setVideo] = useState<string>("");
 
     useEffect(() => {
         if (!id) return;
@@ -62,6 +63,7 @@ export default function AnimeDetailsPage() {
                 const eJson = await eRes.json();
                 if (mounted) setEpisodes(Array.isArray(eJson.data) ? eJson.data : []);            
             
+                setVideo(details.trailer.embed_url.split("?")[0].split("/")[4]);
             
             } catch (e) {
                 console.error(e);
@@ -118,10 +120,10 @@ export default function AnimeDetailsPage() {
                             <View style={{ height: 220, marginTop: 12, marginBottom: 8, borderRadius: 8, overflow: "hidden" }}>
                                 <WebView
                                     originWhitelist={['*']}
-                                    source={{ uri: details.trailer.embed_url }}
+                                    source={{ uri: "https://www.youtube.com/watch?v=" + video }}
+                                    referrerpolicy='strict-origin-when-cross-origin'
                                     style={{ flex: 1 }}
-                                    allowsInlineMediaPlayback
-                                    mediaPlaybackRequiresUserAction={false}
+                                    
                                 />
                             </View>
                         ) : null}
