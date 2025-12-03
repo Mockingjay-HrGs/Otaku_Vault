@@ -9,7 +9,7 @@ import type { HomeTab } from "@/app/index";
 type Anime = {
     mal_id: number;
     title?: string | null;
-    score?: number | null;
+    episodes?: number | null;
     images?: {
         jpg?: {
             image_url?: string | null;

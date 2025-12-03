@@ -32,6 +32,7 @@ export default function AnimeSearch() {
     const [results, setResults] = useState<AnimeResult[]>([]);
     const [loading, setLoading] = useState(false);
     const [touched, setTouched] = useState(false);
+    const [filters, setFilters] = useState<Array<string>>([]);
 
     const handleSearch = async () => {
         const trimmed = query.trim();
@@ -63,7 +64,11 @@ export default function AnimeSearch() {
             item.episodes != null ? `${item.episodes} eps` : "Nb d'épisodes inconnu";
 
         return (
-            <View style={styles.searchRow}>
+            <TouchableOpacity
+                style={styles.searchRow}
+                activeOpacity={0.8}
+                onPress={() => router.push(`/anime/${item.mal_id}`)}
+            >
                 <Image
                     source={{ uri: item.images?.jpg?.image_url ?? undefined }}
                     style={styles.searchPoster}
@@ -74,7 +79,7 @@ export default function AnimeSearch() {
                     </Text>
                     <Text style={styles.searchRowSub}>{`${type} . ${epsText}`}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     };
 
