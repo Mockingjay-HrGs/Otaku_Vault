@@ -1,50 +1,154 @@
-# Welcome to your Expo app 👋
+# 🎬 Otaku Vault
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native mobile application built with Expo that allows anime and manga enthusiasts to discover, search, and explore their favorite series. Browse top airing anime, upcoming releases, and search through a comprehensive database powered by the Jikan API (MyAnimeList).
 
-## Get started
+## 📱 Features
 
-1. Install dependencies
+- **Browse Top Airing Anime** - Discover currently airing anime series
+- **Upcoming Releases** - Stay updated on upcoming anime releases
+- **Search Functionality** - Search for anime by title with instant results
+- **Anime/Manga Toggle** - Switch between anime and manga browsing
+- **Advanced Filtering** - Filter content by type, status, and other parameters
+- **Anime Details** - View detailed information about specific anime/manga
+- **Beautiful UI** - Modern gradient-based design with smooth navigation
+- **Cross-Platform** - Works on iOS, Android, and Web
 
-   ```bash
-   npm install
-   ```
+## 🛠️ Tech Stack
 
-2. Start the app
+- **Framework**: [Expo](https://expo.dev/) with [React Native](https://reactnative.dev/)
+- **Navigation**: [Expo Router](https://expo.github.io/router/) - File-based routing
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **API**: [Jikan API](https://jikan.moe/) (MyAnimeList unofficial API)
 
-   ```bash
-   npx expo start
-   ```
+## 📂 Project Structure
 
-In the output, you'll find options to open the app in a
+```
+├── app/                          # Expo Router pages
+│   ├── _layout.tsx              # Root layout and navigation
+│   ├── index.tsx                # Home page (top airing/upcoming)
+│   ├── anime.tsx                # Search page with filters
+│   └── anime/
+│       └── [id].tsx             # Anime detail page
+├── components/                   # Reusable React components
+│   ├── MalApi.tsx              # API data fetching component
+│   ├── AnimeList.tsx           # Anime list display
+│   ├── SearchBar.tsx           # Search input component
+│   ├── FilterModal.tsx         # Filter selection modal
+│   ├── MangaList.tsx           # Manga list display
+│   └── styles.tsx              # Global styling
+├── utils/
+│   └── ApiClient.ts            # Jikan API client
+├── assets/                       # Images and icons
+├── package.json                  # Dependencies
+├── app.json                      # Expo configuration
+└── tsconfig.json                # TypeScript config
+```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🚀 Getting Started
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+- Expo CLI (optional, but recommended)
 
-## Get a fresh project
+### Installation
 
-When you're ready, run:
+1. Clone the repository
+```bash
+git clone https://github.com/Mockingjay-HrGs/Otaku_Vault.git
+cd Otaku_Vault
+```
 
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Start the development server with expo
+```bash
+npx expo start
+```
+
+## 📖 Usage
+
+### Home Screen
+- View top airing anime and upcoming releases
+- Switch between tabs to see different categories
+- Tap the search icon to navigate to the search page
+
+### Search Page
+- Search for anime/manga by title
+- Toggle between Anime and Manga modes
+- Apply advanced filters (status, type, etc.)
+- Tap any result to view details
+
+### Detail Page
+- View comprehensive information about selected anime/manga
+- See episodes, image, synopsis, and more
+
+## 🔌 API Integration
+
+The app uses the **Jikan API** - an unofficial MyAnimeList API. Key endpoints used:
+
+- `GET /top/anime?filter=airing` - Top airing anime
+- `GET /anime/{id}` - Anime details
+- `GET /anime?query=...` - Search anime
+- Similar endpoints for manga
+
+No authentication required for basic queries.
+
+## 🎨 Styling
+
+Global styles are defined in `components/styles.tsx` and include:
+- Custom gradient backgrounds
+- Responsive spacing and sizing
+- Typography for headers and body text
+- Component-specific styling
+
+## 📦 Key Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| `expo-router` | File-based navigation |
+| `expo-linear-gradient` | Gradient UI elements |
+| `react-native` | Mobile UI framework |
+| `expo-image` | Image loading |
+| `react-navigation` | Navigation primitives |
+
+## 🧪 Development
+
+### Project Reset
+To reset the project to its initial state:
 ```bash
 npm run reset-project
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 📱 App Configuration
 
-## Learn more
+The app is configured in `app.json` with:
+- App name: **otakuVault**
+- Version: **1.0.0**
+- Orientation: **Portrait**
+- Theme: **Automatic** (follows system settings)
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🌟 Features Explained
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### MalApi Component
+Handles all data fetching from the Jikan API, including:
+- Loading states
+- Error handling
+- Pagination support
+- Data formatting
 
-## Join the community
+### FilterModal Component
+Advanced filtering options for:
+- Anime vs Manga selection
+- Status filters (airing, upcoming, etc.)
+- Type filters (TV, Movie, OVA, etc.)
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### ApiClient Utility
+Centralized API client for:
+- Base URL management
+- Request handling
+- Error management
+- URL parameter building
