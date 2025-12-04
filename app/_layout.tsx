@@ -15,17 +15,18 @@ export default function RootLayout() {
         name="anime"
         options={{
           title: 'Anime Search',
-          headerShown: true
+          headerShown: false
         }}
       />
       <Stack.Screen
-        name="manga"
+        name="anime/[id]"
         options={{
-          title: 'Manga Search',
-          headerShown: true
+          headerShown: false,
         }}
       />
+
     </Stack>
+  
   );
 }
 

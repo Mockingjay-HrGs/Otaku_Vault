@@ -1,11 +1,12 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 import styles from "./styles";
 
 type Anime = {
     mal_id: number;
     title?: string | null;
-    score?: number | null;
+    episodes?: number | null;
     images?: {
         jpg?: {
             image_url?: string | null;
@@ -22,25 +23,32 @@ const AnimeListDisplay: React.FC<Props> = ({ animeList = [] }) => {
         return <Text style={styles.centerText}>No anime found.</Text>;
     }
 
+    const goToDetails = (id: number) => {
+        router.push(`/anime/${id}`);
+    };
+
     return (
         <View style={styles.gridContainer}>
             {animeList.map((anime) => (
-                <View key={anime.mal_id} style={styles.card}>
+                <TouchableOpacity
+                    key={anime.mal_id}
+                    style={styles.animeCard}
+                    activeOpacity={0.8}
+                    onPress={() => goToDetails(anime.mal_id)}
+                >
                     <Image
-                        source={{
-                            uri: anime.images?.jpg?.image_url ?? undefined,
-                        }}
-                        style={styles.image}
+                        source={{ uri: anime.images?.jpg?.image_url ?? undefined }}
+                        style={styles.animeImage}
                     />
 
-                    <Text style={styles.title} numberOfLines={2}>
-                        {anime.title ?? "Untitled"}
+                    <Text style={styles.animeTitle} numberOfLines={2}>
+                        {anime.title}
                     </Text>
 
-                    <Text style={styles.subtitle}>
-                        Score : {anime.score ?? "N/A"}
+                    <Text style={styles.animeEpisodes}>
+                        Episodes : {anime.episodes ?? "N/A"}
                     </Text>
-                </View>
+                </TouchableOpacity>
             ))}
         </View>
     );

@@ -1,71 +1,146 @@
 import ApiClient from "@/utils/ApiClient";
 import React, { useState } from "react";
-import { Text, View, ScrollView, TextInput, Button, StyleSheet } from "react-native";
+import {
+    Text,
+    View,
+    ScrollView,
+    TextInput,
+    StyleSheet,
+    TouchableOpacity,
+    Keyboard,
+    ActivityIndicator,
+} from "react-native";
 import AnimeListDisplay from "./AnimeList";
-import styles from './styles';
+import styles from "./styles";
 
-const SearchBar = ({ page }: { page: "Anime" | "Manga" }) => {
+type SearchBarProps = {
+    page: "Anime" | "Manga";
+    extraParams?: string[];
+};
+
+const SearchBar: React.FC<SearchBarProps> = ({ page, extraParams = [] }) => {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [touched, setTouched] = useState(false);
 
     const handleSearch = async () => {
-        if (!query.trim()) return;
-        
+        const trimmed = query.trim();
+        if (!trimmed) {
+            setResults([]);
+            setTouched(true);
+            return;
+        }
+
         setLoading(true);
         setError(null);
-        
-        const api = new ApiClient();
-        let response;
+        setTouched(true);
+        Keyboard.dismiss();
 
-        if (page === "Anime") response = await api.searchAnimeByParams(query);  
-        if (page === "Manga") response = await api.searchMangaByParams(query);
-        
-        setResults(response?.data ?? []);
-        setError(response?.error ?? null);
-        setLoading(false);
+        try {
+            const api = new ApiClient();
+            let response;
+
+            if (page === "Anime") {
+                response = await api.searchAnimeByParams(trimmed, extraParams);
+            }
+
+            if (page === "Manga") {
+                response = await api.searchMangaByParams(trimmed, extraParams);
+            }
+
+            setResults(Array.isArray(response?.data) ? response.data : []);
+            setError(response?.error ?? null);
+        } catch (err: any) {
+            console.error(err);
+            setError(err?.message ?? "Unexpected error");
+            setResults([]);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={searchStyles.searchContainer}>
+            <View style={searchStyles.searchBarWrapper}>
                 <TextInput
                     style={searchStyles.input}
-                    placeholder="Search anime..."
-                    placeholderTextColor="#888"
+                    placeholder="Search"
+                    placeholderTextColor="#ddddff"
                     value={query}
                     onChangeText={setQuery}
+                    returnKeyType="search"
                     onSubmitEditing={handleSearch}
                 />
-                <Button title="Search" onPress={handleSearch} />
+                <TouchableOpacity
+                    style={searchStyles.searchIconWrapper}
+                    onPress={handleSearch}
+                    activeOpacity={0.8}
+                >
+                    <Text style={searchStyles.searchIcon}>🔍</Text>
+                </TouchableOpacity>
             </View>
 
-            {loading && <Text style={styles.centerText}>Searching...</Text>}
-            {error && <Text style={styles.centerText}>Error: {error}</Text>}
-
-            <ScrollView style={{ flex: 1, padding: 16 }}>
-                <AnimeListDisplay animeList={results} />
-            </ScrollView>
+            {loading ? (
+                <View style={styles.searchCenter}>
+                    <ActivityIndicator color="#fff" />
+                </View>
+            ) : error ? (
+                <View style={styles.searchCenter}>
+                    <Text style={styles.centerText}>Error: {error}</Text>
+                </View>
+            ) : results.length === 0 && touched ? (
+                <View style={styles.searchCenter}>
+                    <Text style={styles.centerText}>No result found…</Text>
+                </View>
+            ) : results.length === 0 && !touched ? (
+                <View style={styles.searchCenter}>
+                    <Text style={styles.centerText}>
+                        Type something to start searching
+                    </Text>
+                </View>
+            ) : (
+                <ScrollView style={{ flex: 1, paddingHorizontal: 16, marginTop: 8 }}>
+                    <AnimeListDisplay animeList={results} />
+                </ScrollView>
+            )}
         </View>
     );
 };
 
 const searchStyles = StyleSheet.create({
-    searchContainer: {
-        flexDirection: 'row',
-        padding: 16,
-        gap: 10,
-        alignItems: 'center',
-        backgroundColor: '#1a1a2e',
+    searchBarWrapper: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginHorizontal: 16,
+        marginTop: 12,
+        marginBottom: 8,
     },
     input: {
         flex: 1,
-        backgroundColor: '#16213e',
-        color: 'white',
-        padding: 12,
-        borderRadius: 8,
+        borderRadius: 999,
+        borderWidth: 1,
+        borderColor: "rgba(255,255,255,0.7)",
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        paddingRight: 44,
+        color: "white",
         fontSize: 16,
+        backgroundColor: "rgba(0,0,0,0.25)",
+    },
+    searchIconWrapper: {
+        position: "absolute",
+        right: 24,
+        width: 28,
+        height: 28,
+        borderRadius: 14,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    searchIcon: {
+        fontSize: 18,
+        color: "white",
     },
 });
 
