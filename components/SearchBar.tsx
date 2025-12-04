@@ -13,7 +13,12 @@ import {
 import AnimeListDisplay from "./AnimeList";
 import styles from "./styles";
 
-const SearchBar = ({ page }: { page: "Anime" | "Manga" }) => {
+type SearchBarProps = {
+    page: "Anime" | "Manga";
+    extraParams?: string[];
+};
+
+const SearchBar: React.FC<SearchBarProps> = ({ page, extraParams = [] }) => {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -37,8 +42,13 @@ const SearchBar = ({ page }: { page: "Anime" | "Manga" }) => {
             const api = new ApiClient();
             let response;
 
-            if (page === "Anime") response = await api.searchAnimeByParams(trimmed);
-            if (page === "Manga") response = await api.searchMangaByParams(trimmed);
+            if (page === "Anime") {
+                response = await api.searchAnimeByParams(trimmed, extraParams);
+            }
+
+            if (page === "Manga") {
+                response = await api.searchMangaByParams(trimmed, extraParams);
+            }
 
             setResults(Array.isArray(response?.data) ? response.data : []);
             setError(response?.error ?? null);
@@ -53,7 +63,6 @@ const SearchBar = ({ page }: { page: "Anime" | "Manga" }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* Barre de recherche pill */}
             <View style={searchStyles.searchBarWrapper}>
                 <TextInput
                     style={searchStyles.input}
@@ -73,7 +82,6 @@ const SearchBar = ({ page }: { page: "Anime" | "Manga" }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* États : loading, erreur, aucun résultat */}
             {loading ? (
                 <View style={styles.searchCenter}>
                     <ActivityIndicator color="#fff" />
@@ -116,7 +124,7 @@ const searchStyles = StyleSheet.create({
         borderColor: "rgba(255,255,255,0.7)",
         paddingVertical: 10,
         paddingHorizontal: 16,
-        paddingRight: 44, // pour laisser la place à l’icône
+        paddingRight: 44,
         color: "white",
         fontSize: 16,
         backgroundColor: "rgba(0,0,0,0.25)",

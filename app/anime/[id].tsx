@@ -94,7 +94,7 @@ export default function AnimeDetailsPage() {
         return (
             <SafeAreaView style={styles.searchContainer}>
                 <View style={styles.searchCenter}>
-                    <ActivityIndicator color="#fff" />
+                    <ActivityIndicator color="#090979" />
                 </View>
             </SafeAreaView>
         );
